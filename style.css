@@ -2,6 +2,8 @@
 body {
     margin: 0;
     padding: 0;
+    background: linear-gradient(135deg, #0d47a1 0%, #1565c0 25%, #1976d2 50%, #1e88e5 75%, #2196f3 100%);
+    background-attachment: fixed;
 }
 
 main {
@@ -9,7 +11,7 @@ main {
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
-    padding: 20px;
+    padding: calc(var(--canvas-width) * 0.00625); /* 20px proportional to 3200px width */
     position: fixed;
 }
 
@@ -23,10 +25,10 @@ main canvas {
 .page-container {
     position: absolute;
     /* Use CSS columns for true text flow across columns */
-    column-gap: 5px;
+    column-gap: calc(var(--canvas-width) * 0.0015625); /* 5px proportional to 3200px width */
     column-fill: auto;
     overflow: hidden;
-    padding: 10px;
+    padding: calc(var(--canvas-width) * 0.003125); /* 10px proportional to 3200px width */
     box-sizing: border-box;
     z-index: 1; /* Lower z-index than HTML boxes */
 }
@@ -36,24 +38,73 @@ main canvas {
     text-align: justify;
     text-justify: inter-word;
     font-family: 'Noto Serif', 'Times New Roman', 'DejaVu Serif', serif;
-    font-size: 6px;
+    font-size: calc(var(--canvas-width) * 0.01125); /* 36px proportional to 3200px width */
     line-height: 1.1;
-    color: #000000;
-    /* white-space: pre-line; */
-    margin: 0 0 4px 0;
+    color: #f0f8ff;
+    margin: 0 0 calc(var(--canvas-width) * 0.00125) 0; /* 4px proportional to 3200px width */
     padding: 0;
-    /* hyphens: auto;
-    -webkit-hyphens: auto;
-    -ms-hyphens: auto; */
-    /* Prevent paragraphs from breaking across columns if desired */
-    /* break-inside: avoid-column; */
 }
 
 /* Highlighting styles for robot words */
 .robot-highlight {
-    background-color: #6c3023; /* Dark leathery reddish brown */
-    color: #cfb782; /* Light beige */
+    background-color: #0d47a1; /* Dark blue */
+    color: #ffffe0; /* Light yellow */
     font-weight: bold;
-    padding: 1px 2px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    padding: calc(var(--canvas-width) * 0.0003125) calc(var(--canvas-width) * 0.000625); /* 1px 2px proportional */
+    box-shadow: 0 calc(var(--canvas-width) * 0.0003125) calc(var(--canvas-width) * 0.000625) rgba(0, 0, 0, 0.2); /* 0 1px 2px proportional */
+}
+
+/* Border inset styles - converted from canvas to HTML */
+.border-inset {
+    border: calc(var(--canvas-width) * 0.000625) solid rgba(255, 255, 240, 0.7); /* 2px proportional border */
+    box-sizing: border-box;
+}
+
+/* Boxes container styles */
+.boxes-container {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1000;
+    display: flex;
+    flex-direction: row-reverse; /* Float boxes from right to left */
+    align-items: flex-end; /* Align boxes to bottom of container */
+    line-height: 0; /* Remove line-height to prevent spacing issues */
+}
+
+/* Technical details box styles */
+.technical-details-box {
+    padding: calc(var(--canvas-width) * 0.00375); /* 12px proportional to 3200px width */
+    background-color: rgba(13, 71, 161, 0.9);
+    border: calc(var(--canvas-width) * 0.0003125) solid rgba(255, 255, 255, 0.3); /* 1px proportional */
+    border-radius: calc(var(--canvas-width) * 0.000625); /* 2px proportional */
+    font-family: 'Courier New', monospace;
+    font-size: calc(var(--canvas-width) * 0.01875); /* 60px proportional to 3200px width */
+    line-height: 1.4;
+    color: #f0f8ff;
+    z-index: 2000;
+    box-shadow: 0 calc(var(--canvas-width) * 0.000625) calc(var(--canvas-width) * 0.0025) rgba(0, 0, 0, 0.3); /* 0 2px 8px proportional */
+    left: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+.technical-line {
+    margin-bottom: calc(var(--canvas-width) * 0.0009375); /* 3px proportional */
+    display: flex;
+    justify-content: space-between;
+}
+
+.technical-line .label {
+    font-weight: bold;
+    min-width: calc(var(--canvas-width) * 0.015625); /* 50px proportional */
+    color: #ffffff;
+}
+
+.technical-line:after {
+    content: '';
+    flex-grow: 1;
+    border-bottom: calc(var(--canvas-width) * 0.0003125) dotted rgba(255, 255, 255, 0.5); /* 1px proportional */
+    margin: 0 calc(var(--canvas-width) * 0.00125); /* 4px proportional */
+    align-self: flex-end;
+    margin-bottom: calc(var(--canvas-width) * 0.000625); /* 2px proportional */
 }

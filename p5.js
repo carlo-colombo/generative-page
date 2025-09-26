@@ -7,6 +7,7 @@
 // the text is justified and fills the columns
 
 let sampleText; // global variable to store the text
+let overlayCanvas; // transparent overlay canvas for the boxes
 
 function preload() {
   // load the text from external file
@@ -15,10 +16,29 @@ function preload() {
 
 
 function setup() {
-  createCanvas(1200, 800);
-
+  let canvas = createCanvas(1200, 800);
+  
+  // Position the canvas to appear over HTML elements
+  canvas.style('position', 'absolute');
+  canvas.style('top', '20px');
+  canvas.style('left', '20px');
+  canvas.style('z-index', '100');
+  canvas.style('pointer-events', 'none'); // Allow interaction with elements below
+  
+  // Create a transparent overlay canvas on top
+  overlayCanvas = createGraphics(1200, 800);
+  
+  // Get seed from query string parameter, default to 42 if not provided
+  let urlParams = new URLSearchParams(window.location.search);
+  let seedValue = urlParams.get('seed');
+  if (seedValue !== null) {
+    seedValue = parseInt(seedValue);
+  } else {
+    seedValue = 42; // default seed
+  }
+  
   // Seed the random number generator for reproducible results
-  randomSeed(42);
+  randomSeed(seedValue);
 
   let margin = 20; // space around the page
   let columnCount = 5; // configurable number of columns
@@ -112,6 +132,9 @@ function setup() {
   
   // Draw random lines after setting up the text
   drawRandomLines();
+  
+  // Create HTML boxes instead of canvas overlay
+  createHTMLBoxes();
 }
 
 function drawRandomLines() {
@@ -159,6 +182,83 @@ function drawRandomLines() {
 }
 
 function draw() {
+  // No need to draw anything since boxes are HTML elements
+}
+
+function createHTMLBoxes() {
+  // Calculate bottom line position - align to the bottom of the canvas area
+  let bottomY = height - 10; // Bottom of canvas with small margin
+  let numBoxes = 22; // Number of boxes to create
+  
+  // Start from middle of the page and push toward right
+  let startX = width / 2; // Start from horizontal center
+  let currentX = startX;
+  let overlapAmount = -8; // Negative spacing for overlapping
+  
+  // Generate HTML boxes with random properties
+  for (let i = 0; i < numBoxes; i++) {
+    // Random width and height for each box
+    let boxWidth = random(25, 85);
+    let boxHeight = random(120, 280);
+    
+    // Variation in dark grey colors
+    let greyValue = Math.floor(random(20, 45)); // Variation in darker greys
+    let greyColor = `rgb(${greyValue}, ${greyValue}, ${greyValue})`;
+
+    // Random number of grid sets between 2 and 6 for each box
+    let numGridSets = Math.floor(random(2, 6)); // Random between 2 and 6
+
+    // Create multiple sets of vertical and horizontal gradients
+    let gradientArray = [];
+    
+    for (let gridSet = 0; gridSet < numGridSets; gridSet++) {
+      // Random spacing for this grid set
+      let verticalSpacing = random(3, 15);
+      let horizontalSpacing = random(3, 15);
+      
+      // Random properties for this grid set
+      let gridOpacity = random(0.05, 0.2);
+      let gridLineWidth = random(0.3, 1.2);
+      
+      // Minor random rotation for grid lines between -1 and 1 degree
+      let verticalRotation = 90 + random(-1, 1);  // 90deg ± 1deg for vertical lines
+      let horizontalRotation = 0 + random(-1, 1);   // 0deg ± 1deg for horizontal lines
+      
+      // Add vertical gradient with minor rotation
+      gradientArray.push(`repeating-linear-gradient(${verticalRotation}deg, rgba(255,255,255, ${gridOpacity}), rgba(255,255,255, ${gridOpacity}) ${gridLineWidth}px, transparent ${gridLineWidth}px, transparent ${verticalSpacing}px)`);
+      
+      // Add horizontal gradient with minor rotation
+      gradientArray.push(`repeating-linear-gradient(${horizontalRotation}deg, rgba(255,255,255, ${gridOpacity}), rgba(255,255,255, ${gridOpacity}) ${gridLineWidth}px, transparent ${gridLineWidth}px, transparent ${horizontalSpacing}px)`);
+    }
+    
+    // Calculate Y position so ALL boxes have their bottom edge at the same bottomY line
+    let boxY = bottomY - boxHeight;
+    
+    // Remove vertical jitter to ensure perfect bottom alignment
+    // let verticalJitter = random(-8, 8);
+    // boxY += verticalJitter;
+    
+    
+    // Create HTML div element for the box
+    let box = createDiv('');
+    box.style('position', 'absolute');
+    box.style('left', (20 + currentX) + 'px'); // Add canvas offset
+    box.style('top', (20 + boxY) + 'px'); // Add canvas offset
+    box.style('width', boxWidth + 'px');
+    box.style('height', boxHeight + 'px');
+    box.style('background-color', greyColor);
+    box.style('background-image', gradientArray.join(', '));
+    box.style('z-index', '1000'); // Higher than text and canvas
+    box.style('pointer-events', 'none'); // Don't interfere with interactions
+    
+    // Move to next position with overlapping
+    currentX += boxWidth + overlapAmount;
+    
+    // Gradually reduce overlap as we move right (push effect)
+    if (i > numBoxes / 2) {
+      overlapAmount += 0.5; // Gradually less overlap toward the right
+    }
+  }
 }
 
 // Function to highlight robot words in various languages

@@ -13,6 +13,12 @@ main {
     position: fixed;
 }
 
+/* Canvas positioning to appear over text */
+main canvas {
+    position: relative;
+    z-index: 10;
+}
+
 /* Container styles for the page content */
 .page-container {
     position: absolute;
@@ -22,6 +28,7 @@ main {
     overflow: hidden;
     padding: 10px;
     box-sizing: border-box;
+    z-index: 1; /* Lower z-index than HTML boxes */
 }
 
 /* Paragraph/verse styles */

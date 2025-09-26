@@ -1,0 +1,52 @@
+/* Main layout styles */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+    position: fixed;
+}
+
+/* Container styles for the page content */
+.page-container {
+    position: absolute;
+    /* Use CSS columns for true text flow across columns */
+    column-gap: 5px;
+    column-fill: auto;
+    overflow: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Paragraph/verse styles */
+.verse-paragraph {
+    text-align: justify;
+    text-justify: inter-word;
+    font-family: 'Noto Serif', 'Times New Roman', 'DejaVu Serif', serif;
+    font-size: 6px;
+    line-height: 1.1;
+    color: #000000;
+    /* white-space: pre-line; */
+    margin: 0 0 4px 0;
+    padding: 0;
+    /* hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto; */
+    /* Prevent paragraphs from breaking across columns if desired */
+    /* break-inside: avoid-column; */
+}
+
+/* Highlighting styles for robot words */
+.robot-highlight {
+    background-color: #6c3023; /* Dark leathery reddish brown */
+    color: #cfb782; /* Light beige */
+    font-weight: bold;
+    padding: 1px 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
